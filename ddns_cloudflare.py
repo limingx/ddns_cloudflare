@@ -26,12 +26,12 @@ def get_record_id(dns_name, zone_id, token):
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
                 }
-            )
-    if not json.loads(resp.text)['success']:
+            ).json()
+    if not resp['success']:
         print('get dns record id failed.')
         sys.exit(1)
  
-    domains = json.loads(resp.text)['result']
+    domains = resp['result']
     for domain in domains:
         if dns_name == domain['name']:
             return domain['id']
@@ -50,8 +50,8 @@ def update_dns_record(dns_name, zone_id, token, dns_id, ip, proxied=False):
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
                 }
-            )
-    if not json.loads(resp.text)['success']:
+            ).json()
+    if not resp['success']:
         print('update dns record failed.')
         sys.exit(1)
 
@@ -64,9 +64,9 @@ def dns_record_details(zone_id, dns_id, token):
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
-        )
+        ).json()
 
-    return json.loads(resp.text)
+    return resp
 
 def main():
     public_ip_query = 'https://ifconfig.me/ip'
